@@ -1,0 +1,52 @@
+name: WPF - Build & Publish
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build (Release)
+        run: dotnet build .\Pos.sln -c Release --no-restore
+
+      # 1) نسخة خفيفة Framework-dependent
+      - name: Publish (FDD)
+        run: dotnet publish .\src\Pos.App\Pos.App.csproj -c Release -o .\artifacts\fdd --no-build
+
+      - name: Upload Artifact (FDD)
+        uses: actions/upload-artifact@v4
+        with:
+          name: PosApp_FDD
+          path: .\artifacts\fdd
+
+      # 2) نسخة جاهزة للعميل Self-contained (Single File)
+      - name: Publish (SCD - single file)
+        run: >
+          dotnet publish .\src\Pos.App\Pos.App.csproj
+          -c Release
+          -r win-x64
+          --self-contained true
+          -o .\artifacts\scd
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+
+      - name: Upload Artifact (SCD SingleFile)
+        uses: actions/upload-artifact@v4
+        with:
+          name: PosApp_SCD_SingleFile_win-x64
+          path: .\artifacts\scd
