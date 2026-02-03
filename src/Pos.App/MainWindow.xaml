@@ -9,25 +9,20 @@
 
     <Window.Resources>
 
-        <!-- ====== ألوان (قريبة من Tailwind) ====== -->
-        <SolidColorBrush x:Key="BgApp" Color="#0B1220"/>
         <SolidColorBrush x:Key="BgPanel" Color="#0F1B2E"/>
         <SolidColorBrush x:Key="BgCard" Color="#111F36"/>
         <SolidColorBrush x:Key="BorderSoft" Color="#203353"/>
         <SolidColorBrush x:Key="TextPrimary" Color="#E8EEF8"/>
         <SolidColorBrush x:Key="TextMuted" Color="#9DB0CF"/>
-        <SolidColorBrush x:Key="Accent" Color="#22C55E"/>      <!-- أخضر -->
-        <SolidColorBrush x:Key="Accent2" Color="#38BDF8"/>     <!-- سماوي -->
-        <SolidColorBrush x:Key="Danger" Color="#EF4444"/>      <!-- أحمر -->
-        <SolidColorBrush x:Key="Warning" Color="#F59E0B"/>     <!-- برتقالي -->
-        <SolidColorBrush x:Key="Chip" Color="#0B2A4A"/>        <!-- كبسولة -->
+        <SolidColorBrush x:Key="Accent" Color="#22C55E"/>
+        <SolidColorBrush x:Key="Accent2" Color="#38BDF8"/>
+        <SolidColorBrush x:Key="Danger" Color="#EF4444"/>
+        <SolidColorBrush x:Key="Chip" Color="#0B2A4A"/>
         <SolidColorBrush x:Key="ChipBorder" Color="#164B7A"/>
 
-        <!-- ====== ظل ناعم ====== -->
         <DropShadowEffect x:Key="ShadowSoft" BlurRadius="18" ShadowDepth="0" Opacity="0.35" Color="#000000"/>
         <DropShadowEffect x:Key="ShadowBtn" BlurRadius="14" ShadowDepth="0" Opacity="0.32" Color="#000000"/>
 
-        <!-- ====== Style: Buttons عام ====== -->
         <Style x:Key="BtnBase" TargetType="Button">
             <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
             <Setter Property="Background" Value="{StaticResource BgCard}"/>
@@ -45,11 +40,9 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="14"
                                 SnapsToDevicePixels="True">
-                            <Grid>
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  RecognizesAccessKey="True"/>
-                            </Grid>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -68,7 +61,6 @@
             </Setter>
         </Style>
 
-        <!-- زر رئيسي (أخضر) -->
         <Style x:Key="BtnPrimary" TargetType="Button" BasedOn="{StaticResource BtnBase}">
             <Setter Property="Background" Value="{StaticResource Accent}"/>
             <Setter Property="BorderBrush" Value="#0B7A35"/>
@@ -77,20 +69,17 @@
             <Setter Property="Effect" Value="{StaticResource ShadowBtn}"/>
         </Style>
 
-        <!-- زر ثانوي (سماوي) -->
         <Style x:Key="BtnSecondary" TargetType="Button" BasedOn="{StaticResource BtnBase}">
             <Setter Property="Background" Value="{StaticResource Chip}"/>
             <Setter Property="BorderBrush" Value="{StaticResource ChipBorder}"/>
         </Style>
 
-        <!-- زر تحذير -->
         <Style x:Key="BtnDanger" TargetType="Button" BasedOn="{StaticResource BtnBase}">
             <Setter Property="Background" Value="#2A1216"/>
             <Setter Property="BorderBrush" Value="#7F1D1D"/>
             <Setter Property="Foreground" Value="#FECACA"/>
         </Style>
 
-        <!-- ====== Style: RadioButton (Chips) ====== -->
         <Style x:Key="ChipRadio" TargetType="RadioButton">
             <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
             <Setter Property="FontSize" Value="14"/>
@@ -127,7 +116,6 @@
             </Setter>
         </Style>
 
-        <!-- ====== Card ====== -->
         <Style x:Key="Card" TargetType="Border">
             <Setter Property="Background" Value="{StaticResource BgPanel}"/>
             <Setter Property="BorderBrush" Value="{StaticResource BorderSoft}"/>
@@ -137,12 +125,12 @@
             <Setter Property="Effect" Value="{StaticResource ShadowSoft}"/>
         </Style>
 
-        <!-- ====== نص ====== -->
         <Style x:Key="H1" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
+
         <Style x:Key="Muted" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
             <Setter Property="FontSize" Value="13"/>
@@ -154,3 +142,170 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Bar -->
+        <Border Style="{StaticResource Card}" Padding="14" Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Style="{StaticResource H1}" Text="POS كاشير - أوفلاين"/>
+                    <TextBlock Style="{StaticResource Muted}" Text="واجهة سريعة للعمال • أزرار كبيرة • دعم طباعة حرارية"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Button Style="{StaticResource BtnSecondary}" Content="الإعدادات" Width="120" Margin="0,0,10,0" Click="Settings_Click"/>
+                    <Button Style="{StaticResource BtnDanger}" Content="خروج" Width="90" Click="Exit_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main -->
+        <Grid Grid.Row="1" Margin="0,14,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Products -->
+            <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,14,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Style="{StaticResource H1}" Text="الأصناف" VerticalAlignment="Center"/>
+                        <Border Grid.Column="1"
+                                Background="#0B2A4A"
+                                BorderBrush="{StaticResource ChipBorder}"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Padding="10,6"
+                                Margin="12,0,0,0">
+                            <DockPanel>
+                                <TextBlock Text="بحث:" Foreground="{StaticResource TextMuted}" Margin="0,0,10,0"/>
+                                <TextBox Name="SearchBox"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         Foreground="{StaticResource TextPrimary}"
+                                         FontSize="14"
+                                         TextChanged="SearchBox_TextChanged"/>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,12,0,10">
+                        <Button Style="{StaticResource BtnSecondary}" Content="الكل" MinWidth="90" Click="Category_Click" Tag="ALL"/>
+                        <Button Style="{StaticResource BtnSecondary}" Content="شاورما" MinWidth="90" Margin="10,0,0,0" Click="Category_Click" Tag="SHAWARMA"/>
+                        <Button Style="{StaticResource BtnSecondary}" Content="بطاطس" MinWidth="90" Margin="10,0,0,0" Click="Category_Click" Tag="FRIES"/>
+                        <Button Style="{StaticResource BtnSecondary}" Content="مشروبات" MinWidth="90" Margin="10,0,0,0" Click="Category_Click" Tag="DRINKS"/>
+                    </StackPanel>
+
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                        <UniformGrid Name="ProductsPanel" Columns="3" Margin="0,4,0,0"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- Cart -->
+            <Border Grid.Column="1" Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Style="{StaticResource H1}" Text="سلة الطلب"/>
+
+                    <Border Grid.Row="1"
+                            Background="{StaticResource BgCard}"
+                            BorderBrush="{StaticResource BorderSoft}"
+                            BorderThickness="1"
+                            CornerRadius="14"
+                            Padding="10"
+                            Margin="0,12,0,12">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <ListBox Name="CartList"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     Foreground="{StaticResource TextPrimary}"
+                                     FontSize="16"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
+                                <Button Style="{StaticResource BtnSecondary}" Content="حذف آخر صنف" MinWidth="120" Click="RemoveLast_Click"/>
+                                <Button Style="{StaticResource BtnDanger}" Content="تفريغ السلة" MinWidth="120" Margin="10,0,0,0" Click="ClearCart_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <StackPanel Grid.Row="2">
+                        <TextBlock Style="{StaticResource Muted}" Text="نوع الطلب" Margin="0,0,0,6"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <RadioButton Name="OrderDineIn" Style="{StaticResource ChipRadio}" Content="طاولات" IsChecked="True" Checked="OrderType_Checked"/>
+                            <RadioButton Name="OrderTakeaway" Style="{StaticResource ChipRadio}" Content="سفري" Checked="OrderType_Checked"/>
+                            <RadioButton Name="OrderDelivery" Style="{StaticResource ChipRadio}" Content="دليفري" Checked="OrderType_Checked"/>
+                        </StackPanel>
+
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource Muted}" Text="الإجمالي"/>
+                                <TextBlock Name="TotalText"
+                                           Foreground="{StaticResource TextPrimary}"
+                                           FontSize="28"
+                                           FontWeight="Bold"
+                                           Text="0.00"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+
+                            <Border Grid.Column="1"
+                                    CornerRadius="12"
+                                    Background="#0B2A4A"
+                                    BorderBrush="{StaticResource ChipBorder}"
+                                    BorderThickness="1"
+                                    Padding="10,8"
+                                    VerticalAlignment="Bottom">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource Muted}" Text="ملاحظة (تجريبي)"/>
+                                    <TextBlock Foreground="{StaticResource TextPrimary}" FontSize="13" Text="الأسعار مؤقتة لعرض التصميم"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Button Name="FinishOrderBtn"
+                                Style="{StaticResource BtnPrimary}"
+                                Content="إتمام الطلب"
+                                Height="56"
+                                FontSize="18"
+                                Click="FinishOrder_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Grid>
+</Window>
