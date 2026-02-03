@@ -1,12 +1,61 @@
-﻿<Window x:Class="Pos.App.MainWindow"
+<Window x:Class="Pos.App.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Pos.App"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="نقطة بيع - POS" Height="700" Width="1100"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft"
+        Background="#F3F4F6">
+
+    <Grid Margin="15">
+        <Grid.ColumnDefinitions>
+            <!-- جزء الأصناف -->
+            <ColumnDefinition Width="3*"/>
+            <!-- جزء السلة -->
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ========================= -->
+        <!--     قسم الأصناف          -->
+        <!-- ========================= -->
+        <StackPanel Grid.Column="0">
+            <Border Background="#111827" CornerRadius="8" Padding="10" Margin="0 0 0 10">
+                <TextBlock Text="الأصناف" Foreground="White" FontSize="22" FontWeight="Bold"/>
+            </Border>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <UniformGrid Name="ProductsPanel" Columns="3" Margin="0,10,0,0"/>
+            </ScrollViewer>
+        </StackPanel>
+
+        <!-- ========================= -->
+        <!--     قسم السلة / الطلب     -->
+        <!-- ========================= -->
+        <StackPanel Grid.Column="1">
+
+            <Border Background="#111827" CornerRadius="8" Padding="10">
+                <TextBlock Text="سلة الطلب" Foreground="White" FontSize="22" FontWeight="Bold"/>
+            </Border>
+
+            <ListBox Name="CartList" Margin="0,10" Height="380" FontSize="18"/>
+
+            <!-- نوع الطلب -->
+            <StackPanel Margin="0,10">
+                <TextBlock Text="نوع الطلب:" FontSize="18" FontWeight="SemiBold"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <RadioButton Content="طاولات" Name="OrderDineIn" FontSize="16" Margin="0,0,20,0"/>
+                    <RadioButton Content="سفري" Name="OrderTakeaway" FontSize="16" Margin="0,0,20,0"/>
+                    <RadioButton Content="دليفري" Name="OrderDelivery" FontSize="16"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- الإجمالي -->
+            <TextBlock Text="الإجمالي: 0.00" Name="TotalText"
+                       FontSize="24" FontWeight="Bold" Margin="0,10"/>
+
+            <Button Content="إتمام الطلب" Height="55" Background="#10B981"
+                    Foreground="White" FontSize="20" Name="FinishOrderBtn"/>
+        </StackPanel>
 
     </Grid>
 </Window>
