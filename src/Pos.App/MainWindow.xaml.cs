@@ -27,10 +27,18 @@ namespace Pos.App
         private string _category = "ALL";
         private string _search = "";
 
-        // إعدادات تجريبية (في الصفحة 2 هتيجي من لوحة الإدارة/SQLite)
-        private const double VatRate = 0.14;          // ضريبة 14%
-        private double ServiceRate = 0.10;            // خدمة 10% (للطاولات)
-        private double DeliveryFee = 15;              // رسوم توصيل (للدليفري)
+        // إعدادات تجريبية (هتبقى Settings من SQLite في صفحة 2)
+        private const double VatRate = 0.14;   // 14%
+        private double ServiceRate = 0.10;     // 10% للطاولات
+        private double DeliveryFee = 15;       // رسوم توصيل
+
+        // Brushes آمنة (بدون null)
+        private static readonly Brush BgNormal   = new SolidColorBrush(Color.FromRgb(0x11, 0x1F, 0x36)); // #111F36
+        private static readonly Brush BgHover    = new SolidColorBrush(Color.FromRgb(0x14, 0x27, 0x46)); // #142746
+        private static readonly Brush BorderNorm = new SolidColorBrush(Color.FromRgb(0x20, 0x33, 0x53)); // #203353
+        private static readonly Brush BorderHover= new SolidColorBrush(Color.FromRgb(0x2F, 0x4B, 0x78)); // #2F4B78
+        private static readonly Brush TextMain   = new SolidColorBrush(Color.FromRgb(0xE8, 0xEE, 0xF8)); // #E8EEF8
+        private static readonly Brush TextMuted  = new SolidColorBrush(Color.FromRgb(0x9D, 0xB0, 0xCF)); // #9DB0CF
 
         public MainWindow()
         {
@@ -39,7 +47,7 @@ namespace Pos.App
             UpdateTotal();
         }
 
-        // ================= UI Events =================
+        // ================= Events =================
 
         private void Category_Click(object sender, RoutedEventArgs e)
         {
@@ -84,19 +92,17 @@ namespace Pos.App
                 return;
             }
 
-            // صفحة 2: هنا هنحفظ الفاتورة في SQLite + نطبع + نقاط العملاء
-            MessageBox.Show("تمام ✅ (لسه تجريبي)\nفي الصفحة 2 هنضيف الحفظ والطباعة.", "إتمام الطلب", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("تمام ✅ (لسه تجريبي)\nفي الصفحة 2 هنضيف الحفظ والطباعة.", "إتمام الطلب",
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("الإعدادات هتكون في صفحة مستقلة (لوحة الإدارة) في صفحات لاحقة.", "إعدادات", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("الإعدادات هتكون في صفحة مستقلة لاحقًا.", "إعدادات",
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void Exit_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+        private void Exit_Click(object sender, RoutedEventArgs e) => Close();
 
         // ================= Rendering =================
 
@@ -120,16 +126,15 @@ namespace Pos.App
                 Margin = new Thickness(8),
                 Height = 96,
                 Cursor = System.Windows.Input.Cursors.Hand,
-                Background = (Brush)new BrushConverter().ConvertFromString("#111F36"),
-                BorderBrush = (Brush)new BrushConverter().ConvertFromString("#203353"),
+                Background = BgNormal,
+                BorderBrush = BorderNorm,
                 BorderThickness = new Thickness(1),
-                Foreground = (Brush)new BrushConverter().ConvertFromString("#E8EEF8"),
+                Foreground = TextMain,
                 FontSize = 16,
                 Padding = new Thickness(12, 10, 12, 10),
                 Tag = p
             };
 
-            // Template بسيط بالـ code (عشان يطلع شيك بدون تعقيد)
             var grid = new Grid();
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -141,13 +146,14 @@ namespace Pos.App
                 FontWeight = FontWeights.SemiBold,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                TextAlignment = TextAlignment.Center
+                TextAlignment = TextAlignment.Center,
+                Foreground = TextMain
             };
 
             var price = new TextBlock
             {
                 Text = $"{p.Price:0.00} ج",
-                Foreground = (Brush)new BrushConverter().ConvertFromString("#9DB0CF"),
+                Foreground = TextMuted,
                 FontSize = 13,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Margin = new Thickness(0, 6, 0, 0)
@@ -167,16 +173,16 @@ namespace Pos.App
                 UpdateTotal();
             };
 
-            // Hover effect بسيط
             btn.MouseEnter += (_, __) =>
             {
-                btn.Background = (Brush)new BrushConverter().ConvertFromString("#142746");
-                btn.BorderBrush = (Brush)new BrushConverter().ConvertFromString("#2F4B78");
+                btn.Background = BgHover;
+                btn.BorderBrush = BorderHover;
             };
+
             btn.MouseLeave += (_, __) =>
             {
-                btn.Background = (Brush)new BrushConverter().ConvertFromString("#111F36");
-                btn.BorderBrush = (Brush)new BrushConverter().ConvertFromString("#203353");
+                btn.Background = BgNormal;
+                btn.BorderBrush = BorderNorm;
             };
 
             return btn;
@@ -185,7 +191,6 @@ namespace Pos.App
         private void RefreshCartList()
         {
             CartList.Items.Clear();
-
             foreach (var item in _cart)
                 CartList.Items.Add($"{item.Name}  —  {item.Price:0.00} ج");
         }
@@ -194,17 +199,11 @@ namespace Pos.App
         {
             var subTotal = _cart.Sum(x => x.Price);
 
-            // ضريبة على الإجمالي (تجريبي)
             var vat = subTotal * VatRate;
-
-            // خدمة للطاولات فقط
             var service = (OrderDineIn.IsChecked == true) ? subTotal * ServiceRate : 0;
-
-            // رسوم توصيل للدليفري فقط
             var delivery = (OrderDelivery.IsChecked == true) ? DeliveryFee : 0;
 
             var total = subTotal + vat + service + delivery;
-
             TotalText.Text = total.ToString("0.00");
         }
     }
